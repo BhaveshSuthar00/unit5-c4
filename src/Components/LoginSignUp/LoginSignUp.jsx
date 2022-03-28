@@ -12,15 +12,21 @@ export const LoginSignUp = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     axios.get('http://localhost:8080/users').then((res)=>{
-      res.data.filter((el)=>{
+      let user = res.data.filter((el)=>{
+        if(el.name === loginData.name  && el.password ===  loginData.password) return true;
+        else{
+          return false;
+        }
       })
+      if(user.length === 1){
+        localStorage.setItem('userLoginDetails', JSON.stringify(user[0]));
+      }
     }).catch((err) => {
       console.log(err);
     })
   }
   const handleLoginChange = (e) => {
     const {id, value} = e.target;
-    console.log(id, value)
     setLoginData({...loginData, [id] : value});
   }
   
@@ -105,7 +111,7 @@ export const LoginSignUp = () => {
         <br />
         <input type="submit" className="submitSignUpForm" />
       </form>
-      <form className="login" onSubmit={(e) => {handleSignInChange(e) }}>
+      <form className="login" onSubmit={(e)=> {handleLogin(e)}}>
         <h1>Login</h1>
         <label>name</label>
         <input
@@ -125,7 +131,7 @@ export const LoginSignUp = () => {
           required
         />
         <br />
-        <input type="submit" className="submitLoginForm" onSubmit={(e)=> handleLogin(e)} />
+        <input type="submit" className="submitLoginForm" />
       </form>
     </div>
   );

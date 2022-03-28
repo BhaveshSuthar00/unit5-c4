@@ -33,7 +33,7 @@ export const Home = () => {
          }) // Filter on the basis of Users interests and location (both true)
         .map((el) => {
           return (
-            <Link to={`/meetups/${el.id}`} key={el.id} className="events">
+            <Link to={`/meetup/${el.id}`} key={el.id} className="events">
               <div className='title'>
                 {el.title}
               </div>
@@ -59,7 +59,7 @@ export const Home = () => {
             <option value="mumbai">Mumbai</option>
           </select>
         </div>
-        <Link to={`add your route here`}> Add Meetup</Link>
+        <Link to={`/addmeetup`}> Add Meetup</Link>
         <h1>Subscribed Events</h1>
         <div className="subscribedEvents">
           {/* All user subcribed events should be displayed here in an ascending order of date */}
@@ -67,7 +67,7 @@ export const Home = () => {
           {[]
             .map((el) => {
               return (
-                <Link to={`add route here`} className="events">
+                <Link to={`/meetup/:id`} className="events">
                   {/* Each event should have these elements/children (divs):
                     ex : title, theme, description, date, time, location, image(optional)
                     the classNames should be also : title, theme, description, date, time, location, image(optional) */}
