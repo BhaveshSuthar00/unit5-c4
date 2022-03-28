@@ -1,25 +1,68 @@
+import axios from 'axios';
+import {useState, useEffect} from 'react';
 export const LoginSignUp = () => {
+  const [loginData, setLoginData] = useState({});
+  const [signInData, setSignInData] = useState({
+    interests : [],
+    name : '', 
+    location : '',
+    password : '',
+    image : ''
+  });
+  const handleLogin = (e) => {
+    e.preventDefault();
+    axios.get('http://localhost:8080/users').then((res)=>{
+      res.data.filter((el)=>{
+      })
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+  const handleLoginChange = (e) => {
+    const {id, value} = e.target;
+    console.log(id, value)
+    setLoginData({...loginData, [id] : value});
+  }
+  
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    axios.post('http://localhost:8080/users', signInData);
+  }
+  const handleSignInChange = (e, interest) => {
+    const {id, value} = e.target;
+    
+    if(interest !== undefined){
+      console.log(id, value);
+    setSignInData({...signInData, interests : [...signInData.interests,id]});
+    }
+    else {
+
+      setSignInData({...signInData, [id] : value});
+    }
+  }
   return (
     <div className="loginSignUp">
-      <form className="signUp" onSubmit={(e) => { }}>
+      <form className="signUp" onSubmit={(e) => {handleSignIn(e) }}>
         <h1>SignUp</h1>
         <label>name</label>
         <input
           type="text"
+          id="name"
           className="name"
-          onChange={(event) => { }}
+          onChange={(e) => { handleSignInChange(e) }}
           required
         />
         <br />
         <label>password</label>
         <input
           type="text"
+          id="password"
           className="password"
-          onChange={(event) => { }}
+          onChange={(e) => { handleSignInChange(e) }}
           required
         />
         <br />
-        <select value={""} className="location" onChange={(event) => { }}>
+        <select value={""} id='location' className="location" onChange={(e) => { handleSignInChange(e) }}>
           <option value=""></option>
           <option value="bangalore">Bangalore</option>
           <option value="kolkata">Kolkata</option>
@@ -31,54 +74,58 @@ export const LoginSignUp = () => {
         <label>technology</label>
         <input
           type="checkbox"
+          id="technology"
           className="technology"
-          onChange={(event) => { }}
+          onChange={(e) => { handleSignInChange(e, 'interests') }}
         />
         <br />
         <label>food</label>
-        <input type="checkbox" className="food" onChange={(event) => { }} />
+        <input type="checkbox" id="food" className="food" onChange={(e) => { handleSignInChange(e,'interests') }} />
         <br />
         <label>movies</label>
-        <input type="checkbox" className="movies" onChange={(event) => { }} />
+        <input type="checkbox" id='movies' className="movies" onChange={(e) => {handleSignInChange(e,'interests') }} />
         <br />
         <label>culture</label>
-        <input type="checkbox" className="culture" onChange={(event) => { }} />
+        <input type="checkbox" id="culture" className="culture" onChange={(e) => {handleSignInChange(e,'interests') }} />
         <br />
         <label>art</label>
-        <input type="checkbox" className="art" onChange={(event) => { }} />
+        <input type="checkbox" id="art" className="art" onChange={(e) => {handleSignInChange(e,'interests') }} />
         <br />
         <label>drama</label>
-        <input type="checkbox" className="drama" onChange={(event) => { }} />
+        <input type="checkbox" id='drama' className="drama" onChange={(e) => {handleSignInChange(e,'interests') }} />
         <br />
         <label>image</label>
         <input
           type="text"
+          id='image'
           className="image"
-          onChange={(event) => { }}
+          onChange={(e) => {handleSignInChange(e) }}
           required
         />
         <br />
         <input type="submit" className="submitSignUpForm" />
       </form>
-      <form className="login" onSubmit={(e) => { }}>
+      <form className="login" onSubmit={(e) => {handleSignInChange(e) }}>
         <h1>Login</h1>
         <label>name</label>
         <input
           type="text"
           className="name"
-          onChange={(event) => { }}
+          id="name"
+          onChange={(e) => { handleLoginChange(e)}}
           required
         />
         <br />
         <label>password</label>
         <input
           type="text"
+          id="password"
           className="password"
-          onChange={(event) => { }}
+          onChange={(e) => {handleLoginChange(e) }}
           required
         />
         <br />
-        <input type="submit" className="submitLoginForm" />
+        <input type="submit" className="submitLoginForm" onSubmit={(e)=> handleLogin(e)} />
       </form>
     </div>
   );

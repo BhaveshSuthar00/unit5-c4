@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react'
 import axios from "axios";
 
 export const Home = () => {
+  const [location, setLocation ] = useState(null);
   const [meetups, setMeetups] = useState([]);
   const getData = () => {
     axios.get('http://localhost:8080/meetups').then((res)=>{
@@ -10,17 +11,26 @@ export const Home = () => {
     setMeetups(res.data);
     }).catch((err)=>{
       console.log(err);
-      // window.location.href = '*';
     })
   }
   useEffect(()=>{
     getData();
   }, [])
+  if(!meetups){
+    return <h1>Loading</h1>
+  }
   return (
     <div className="homeContainer">
       {
         meetups
-        // .filter((el) => { }) // Filter on the basis of Users interests and location (both true)
+        .filter((el) => {
+          if(location !== null){
+            if(el.location.toLowerCase() === location.toLowerCase()) return true;
+            else return false;
+          } 
+          else if(location === '') return true;
+          else return true
+         }) // Filter on the basis of Users interests and location (both true)
         .map((el) => {
           return (
             <Link to={`/meetups/${el.id}`} key={el.id} className="events">
@@ -39,10 +49,10 @@ export const Home = () => {
       <div className="subscribedData">
         <div>
           <select
-            value={"add your value here"}  // add value here
-            onChange={(e) => { }}
+            value={'null'}  // add value here
+            onChange={(e) => {setLocation(e.target.value) }}
           >
-            <option value="">------</option>
+            <option value="null">------</option>
             <option value="bangalore">Bangalore</option>
             <option value="kolkata">Kolkata</option>
             <option value="delhi">Delhi</option>
