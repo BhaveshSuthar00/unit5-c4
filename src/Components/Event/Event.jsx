@@ -16,15 +16,17 @@ export const Event = () => {
   }
   const getUser = () =>{
     let userData = JSON.parse(localStorage.getItem('userLoginDetails'));
-    let current = userData[0].id;
+    let current = userData.id;
     axios.get(`http://localhost:8080/users/${current}`).then((response) => {
       setDataUser(response.data);
-      response.data.subscribed.map((el)=>{
-        if(+el === +valueHere){
-          setState(true);
-        } 
-        else setState(false);
-      })
+
+        response.data.subscribed.map((el)=>{
+          if(+el === +valueHere){
+            setState(true);
+          } 
+          else setState(false);
+        })
+
     })
   }
   useEffect(()=>{

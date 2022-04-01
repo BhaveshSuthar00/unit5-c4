@@ -4,9 +4,17 @@ import axios from "axios";
 import {Main } from '../Styled/Scomponents'
 export const Home = () => {
   const [location, setLocation] = useState(null);
+  const [loggedIn , setLogin] = useState(false);
+  const [loginData , setLoginData] = useState({
+    id : '',
+  })
   const [meetups, setMeetups] = useState([]);
   const [subscribedData, setSubData] = useState([]);
-  const userId = JSON.parse(localStorage.getItem('userLoginDetails'));
+  const userId = JSON.parse(localStorage.getItem('userLoginDetails')) || {};
+  useEffect(()=>{
+    setLoginData({})
+    setLoginData({...userId});
+  },[])
   const getData = () => {
     axios
       .get("http://localhost:8080/meetups")
@@ -17,12 +25,14 @@ export const Home = () => {
         console.log(err);
       });
   };
+  useEffect(()=>{
+    if(loginData.id > 0){
+      setLogin(true);
+    }
+  },[])
   useEffect(() => {
     getData();
   }, []);
-  if (!meetups) {
-    return <h1>Loading</h1>;
-  }
   return (
     <div className="homeContainer">
       {meetups
@@ -50,14 +60,9 @@ export const Home = () => {
                   <p className="location">{singleDd.location}</p>
                 </div>
               </Main>
-              {/* add your children here (divs)
-              ex : title, theme, description, date, time, location, image(optional)
-              the classNames should be also : title, theme, description, date, time, location, image(optional)
-             */}
             </Link>
           );
         })}
-
       <div className="subscribedData">
         <div>
           <select
@@ -73,7 +78,11 @@ export const Home = () => {
             <option value="mumbai">Mumbai</option>
           </select>
         </div>
-        <Link to={`/addmeetup`}> Add Meetup</Link>
+        {
+          loggedIn ? 
+          <Link to={`/addmeetup`}> Add Meetup</Link>
+          : null
+        }
         <h1>Subscribed Events</h1>
         <div className="subscribedEvents">
           {/* All user subcribed events should be displayed here in an ascending order of date */}

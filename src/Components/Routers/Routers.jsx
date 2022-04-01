@@ -19,5 +19,3 @@ export const Routers = () => {
         </Routes>
     </>);
 }
-            {/* meetup/:id create for detail page imp */}
-            {/* meetup route should be dynamic */}
